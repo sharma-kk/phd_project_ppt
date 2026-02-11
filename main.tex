@@ -74,17 +74,17 @@
     \vspace{0.1cm}
     \item<3-> \textcolor{orange}{Idealized:} we make approximations!
     \begin{itemize}
-        \item<4-> 2D model: solves for velocity, temperature, and pressure
+        \item<3-> 2D model: solves for velocity, temperature, and pressure
     \end{itemize}
     \vspace{0.1cm}
-    \item<5-> \textcolor{orange}{Stochastic:} has stochastic/random terms (think of Brownian motion)
+    \item<4-> \textcolor{orange}{Stochastic:} has stochastic/random terms (think of Brownian motion)
     \vspace{0.1cm}
-    \item<6-> \textcolor{purple}{Structure-preserving:} preserves underlying geometric and physical structure
+    \item<5-> \textcolor{purple}{Structure-preserving:} preserves underlying geometric and physical structure
     \vspace{0.1cm}
-    \item<7-> \textcolor{teal}{Development:} modeling, analysis, and \textcolor{teal}{simulation}
+    \item<6-> \textcolor{teal}{Development:} modeling, analysis, and \textcolor{teal}{simulation}
 \end{itemize} 
 \vspace{5mm}
-\onslide<8>{\large \textbf{We are solving stochastic PDEs which model ocean-atmosphere interactions!}}
+\onslide<7>{\large \textbf{We are solving stochastic PDEs which model ocean-atmosphere interactions!}}
 \end{frame}
 \subsection{Why add stochastic terms?}
 \begin{frame}{Multiscale phenomena}
@@ -111,14 +111,15 @@
         \item<2-> Deterministic
         \item<2-> Stochastic
     \end{enumerate}
-    \item<3-> We explored \textbf{stochastic parameterization} : {stochastic advection by Lie transport}\footfullcite{holmVariationalPrinciplesStochastic2015} (SALT)
+    \item<3-> We explored \textbf{stochastic parameterization} : {stochastic advection by Lie transport} (SALT)
     \vspace{2mm}
-    \item<4-> Why \textbf{SALT}? 
+    \item<4-> Why {SALT}? 
     \begin{itemize}
-        \item<4-> Structure preservation
-        \item<4-> Better uncertainty quantification skills
-        \item<4-> Data-driven approach
+        \item<4-> preserves structure $\rightarrow$ conservation properties still hold
+        \item<4-> better forecast skills $\rightarrow$ uncertainty due to unresolved transport processes can be quantified
+        \item<4-> conducive to data-driven approaches $\rightarrow$ can be estimated from observations/satellite data
     \end{itemize}
+    % \item<4-> The stochastic terms models the unresolved transport processes! 
 \end{itemize}
 \end{frame}
 \section{Research objectives}
@@ -139,16 +140,14 @@
     % \end{itemize}
     \vspace{.2cm}
     \item \only<1> {Compare the stochastic model results with other existing models/approaches}
-    \only<2> {\st{Compare the stochastic model results with other existing models}}
+    \only<2> {\st{Compare the stochastic model results with other existing models/approaches}}
 \end{enumerate}    
 \end{frame}
 \section{The climate model}
 \begin{frame}{Model equations}
-  \onslide<1-> 2D climate model equations\footfullcite{crisanImplementationHasselmannsParadigm2023}:
+  \onslide<1-> 2D climate model equations:
 \begin{columns}[T] % align columns
-\begin{column}{.65\textwidth}
-% \begin{itemize}
-    % \item<1-> 2D climate model equations\footfullcite{crisanImplementationHasselmannsParadigm2023}:
+\begin{column}{.70\textwidth}
     \begin{footnotesize}
     \begin{align*}
             \text{Atmosphere}: \ &\deriv \mathbf{u}^a + ((\mathbf{u}^a \deriv t + \textcolor{violet}{\sum_i \boldsymbol{\xi}_i \circ \deriv W^i})\cdot \nabla) \mathbf{u}^a + \frac{1}{Ro^a} \hat{\mathbf{z}} \times (\mathbf{u}^a\deriv t + \textcolor{violet}{\sum_i \boldsymbol{\xi}_i \circ \deriv W^i}) \\
@@ -163,6 +162,8 @@
     \end{footnotesize}
 % \item Our goal is to numerically solve the model equations!
 % \end{itemize}
+\vspace{.2cm}
+Incompressible/compressible Navier-Stokes + Advection-diffusion eqs.
 \end{column}%
 \hfill%
 \begin{column}{.30\textwidth}
@@ -173,8 +174,7 @@
     \includegraphics[width=1\linewidth]{images/domain.pdf}
     \caption{Model domain}
 \end{figure}
-$\mathbf{u}:$ velocity, $\theta:$ temperature $p:$ pressure\\ $Re:$ Reynolds number \\ $Pe:$ P\'{e}clet number\\ $Ro:$ Rossby number \\
-$\sigma, \gamma:$ coupling coefficients}
+$\mathbf{u}:$ velocity, \\ $\theta:$ temperature, \\ $p:$ pressure}
 \end{column}%
 \end{columns}
 \end{frame}
