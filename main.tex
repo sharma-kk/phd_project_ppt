@@ -1,0 +1,90 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+
+\mode<presentation>
+{
+    \usetheme[sectionpage, subsectionpage]{RTG2583}
+}
+
+% Standard packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+% \usepackage{microtype}
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage[justification=centering]{caption} %
+\captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
+\captionsetup{belowskip=0pt}
+
+\usepackage{hyperref}
+\definecolor{my_blue}{RGB}{0,80,200} % 0,77,128
+\hypersetup{%
+    citecolor     = my_blue,% Color of citations % 
+    urlcolor      = my_blue,%  Color of external urls, i used my_lightblue before
+}
+\usepackage{enumerate}
+\usepackage[export]{adjustbox}
+\usepackage{multimedia}
+\usepackage{dsfont} % for indicator function 
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{biblatex}
+\addbibresource{literature.bib}
+% Custom commands
+\usepackage{algcompatible} % for long algorithms, algorithmicx
+\usepackage{algorithm} % for algorithms
+% \usepackage[symbol]{footmisc}
+\usepackage{array} % draw matrices
+\newcommand*{\vertbar}{\rule[-.5ex]{0.5pt}{5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{5ex}{0.5pt}}
+\usepackage{booktabs} % for fancy tables
+\newcommand{\deriv}{\mathrm{d}} % new command for derivative d
+\newcommand{\vect}[1]{\boldsymbol{#1}} % for bolding x 
+\usepackage{tikz} % to create pictures 
+\usetikzlibrary{positioning,shapes,arrows.meta}
+\tikzset{
+    process1/.style={rectangle, rounded corners, minimum width=4cm, minimum height=2cm, text width=8cm,text centered, draw=black, fill=red!30},
+    process2/.style={rectangle, rounded corners, minimum width=4cm, minimum height=2cm, text width=5cm,text centered, draw=black, fill=orange!30},
+    process3/.style={rectangle, rounded corners, minimum width=4cm, minimum height=2cm, text width=5cm,text centered, draw=black, fill=green!30},
+    arr/.style={thick,-stealth}
+    } % for the flow chart
+%Title setup
+%Title setup
+\title[PhD project]{Technical Talk - PhD Project}
+\subtitle{}
+\author[Kamal Sharma]{Kamal Sharma}
+\institute[UHH]{Department of Mathematics, University of Hamburg}
+
+\date{February 13, 2026}
+
+
+% Start document
+\begin{document}
+\begin{frame}[noframenumbering]
+    \maketitle    
+\end{frame}
+\section{Introduction}
+\begin{frame}{What is it about?}
+\onslide<1->{\large \textcolor{teal}{Development} of a \textcolor{purple}{structure-preserving} \textcolor{orange}{idealized} \textcolor{orange}{stochastic climate model}}
+\vspace{5mm}
+\begin{itemize}
+    \item<2-> \textcolor{orange}{Climate model:} set of equations modeling climatic events/processes
+    \begin{itemize}
+        \item<3-> Our model: simulates ocean-atmosphere interactions
+    \end{itemize}
+    \vspace{0.1cm}
+    \item<4-> \textcolor{orange}{Idealized:} we make approximations!
+    \begin{itemize}
+        \item<5-> 2D model: solves for velocity, temperature, and pressure
+    \end{itemize}
+    \vspace{0.1cm}
+    \item<6-> \textcolor{orange}{Stochastic:} has stochastic/random terms (think of Brownian motion)
+    \vspace{0.1cm}
+    \item<7-> \textcolor{purple}{Structure-preserving:} preserves underlying geometric and physical structure
+    \vspace{0.1cm}
+    \item<8-> \textcolor{teal}{Development:} modeling, analysis, and \textcolor{teal}{simulation}
+\end{itemize} 
+\vspace{5mm}
+\onslide<9>{\large \textbf{We are solving stochastic PDEs which model ocean-atmosphere interactions!}}
+\end{frame}
+\end{document}
+

@@ -1,0 +1,274 @@
+% Include required packages
+\RequirePackage{xcolor} % Custom RGB colors
+\RequirePackage{calc} % \ratio used for progress bar 
+\RequirePackage{tikz} % Drawing of progress bar
+\RequirePackage{appendixnumberbeamer} % Correct enumeration of backup slides and progress bar length
+\renewcommand\appendixname{Appendix} % Fix warning caused by hyperref due to \appendixname{\translate{Appendix}} in latex beamer
+
+% Define options
+\newif\ifNoFoot
+\NoFootfalse
+\DeclareOption{nofoot}{\NoFoottrue}
+
+\newif\ifNoPageNumber
+\NoPageNumberfalse
+\DeclareOption{nopagenumber}{\NoPageNumbertrue}
+
+\newif\ifSectionPage
+\SectionPagefalse
+\DeclareOption{sectionpage}{\SectionPagetrue}
+
+\newif\ifSubsectionPage
+\SubsectionPagefalse
+\DeclareOption{subsectionpage}{\SubsectionPagetrue}
+
+\newif\ifNoBackgroundTitle
+\NoBackgroundTitlefalse
+\DeclareOption{nobackgroundtitle}{\NoBackgroundTitletrue}
+
+\newif\ifNoBackgroundSections
+\NoBackgroundSectionsfalse
+\DeclareOption{nobackgroundsections}{\NoBackgroundSectionstrue}
+
+\newif\ifFullBackground
+\FullBackgroundfalse
+\DeclareOption{background}{\FullBackgroundtrue}
+\ProcessOptions
+
+% Import themes
+\useinnertheme[shadow=true]{rounded}
+\useoutertheme{shadow}
+\usecolortheme{whale}
+
+% General configuration
+\setbeamertemplate{navigation symbols}{} % Supresses all navigation symbols
+\setbeamercovered{invisible} % Defines behaviour of hidden elements
+\setbeamersize{text margin left=2em, text margin right=2em}
+
+% Custom colors from logo
+\definecolor{rtg_red}{RGB}{235,0,9}
+\definecolor{rtg_darkblue}{RGB}{0,77,128}
+\definecolor{rtg_lightblue}{RGB}{0,175,192}
+
+% Set general palette colors
+\setbeamercolor*{palette primary}{bg=rtg_darkblue, fg = white}
+\setbeamercolor*{palette secondary}{bg=rtg_lightblue, fg = white}
+\setbeamercolor*{palette tertiary}{bg=rtg_red, fg = white}
+\setbeamercolor*{palette quaternary}{bg=gray, fg = white}
+
+% General text setup
+\setbeamercolor{alerted text}{use=palette tertiary, fg=palette tertiary.bg}
+
+
+\titlegraphic
+{
+    \includegraphics[height=.125\textheight]{beamerthemeRTG2583_images/uhh_eq.png}
+    % \hspace*{2eM}
+    % \includegraphics[height=.125\textheight]{beamerthemeRTG2583_images/tuhh.png}
+    % \hspace*{2eM}
+    % \includegraphics[height=.125\textheight]{beamerthemeRTG2583_images/rtg2583_eq.png}
+    % \hspace*{2eM}
+    % \includegraphics[height=.125\textheight]{beamerthemeRTG2583_images/lcc.png}
+    % _eq logos were equalized in w/h relation to opposite logo. Result in symmetric look.
+}
+
+% Configure TOC
+\setbeamercolor*{section number projected}{parent=palette primary}
+\setbeamercolor*{section in toc}{use=palette primary, fg=palette primary.bg}
+\setbeamercolor*{subsection in toc}{use=palette secondary, fg=palette secondary.bg}
+\setbeamerfont{section in toc}{size={\fontsize{12}{12}}}
+\setbeamertemplate{subsection in toc}{%
+    \leavevmode\leftskip=5.65ex%
+    \llap{\raisebox{0.2ex}{\color{rtg_lightblue}{$\blacktriangleright$}}\kern1ex}%
+    \inserttocsubsection\par%
+}
+
+% Set text element in head/foot colors
+\setbeamercolor*{author in head/foot}{parent=palette primary}
+\setbeamercolor*{title in head/foot}{parent=palette primary}
+\setbeamercolor*{date in head/foot}{parent=palette primary}
+\setbeamercolor*{section in head/foot}{parent=palette secondary}
+\setbeamercolor*{subsection in head/foot}{parent=palette primary}
+
+% Configure blocks
+\setbeamerfont{block title}{size={}} % Protects from increasing result in regular font size
+\setbeamercolor{block title}{parent=palette primary}
+\setbeamercolor{block title example}{parent=palette secondary}
+\setbeamercolor{block title alerted}{parent=palette tertiary}
+\setbeamercolor{block body}{parent=normal text, use=block title, bg=block title.bg!10!bg}
+\setbeamercolor{block body example}{parent=normal text, use=block title example, bg=block title example.bg!10!bg}
+\setbeamercolor{block body alerted}{parent=normal text, use=block title alerted, bg=block title alerted.bg!10!bg}
+
+
+% Configure bibliography
+\setbeamercolor{bibliography entry author}{fg=black}
+\setbeamercolor{bibliography entry title}{fg=black} 
+\setbeamercolor{bibliography entry location}{fg=black} 
+\setbeamercolor{bibliography entry note}{fg=black}  
+
+% Configure itemize environments
+\setbeamertemplate{itemize item}{$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{$\blacktriangleright$}
+\setbeamertemplate{itemize subsubitem}{$\bullet$}
+\setbeamercolor*{itemize item}{use=palette primary, fg=palette primary.bg}
+\setbeamercolor*{itemize subitem}{use=palette secondary, fg=palette secondary.bg}
+\setbeamercolor*{itemize subsubitem}{use=palette secondary, fg=palette secondary.bg}
+
+% Configure enumerate environment
+\setbeamertemplate{enumerate items}[default]
+\setbeamercolor*{item projected}{parent=palette primary}
+\setbeamercolor*{enumerate item}{use=palette primary, fg=palette primary.bg}
+\setbeamercolor*{enumerate subitem}{use=palette secondary, fg=palette secondary.bg}
+\setbeamercolor*{enumerate subsubitem}{use=palette secondary, fg=palette secondary.bg}
+
+% Configure captions
+\setbeamercolor{caption}{fg=black}
+\setbeamercolor{caption name}{use=palette primary, fg=palette primary.bg}
+
+% Configure other elements
+\setbeamercolor{button}{use=palette primary, bg=palette primary.bg!60!bg,fg=palette primary.fg}
+
+% Set slide backgrounds
+\setbeamertemplate{background on slide}{%
+    \includegraphics[height=\paperheight]{beamerthemeRTG2583_images/background_rtg.png}
+}
+
+\defbeamertemplate*{background}{rtg background}
+{
+    \ifnum \insertpagenumber=1
+        \ifNoBackgroundTitle\else
+            \usebeamertemplate*{background on slide}
+        \fi
+    \fi
+    
+    \ifFullBackground
+        \usebeamertemplate*{background on slide}
+    \fi
+}
+
+%Set foot
+\defbeamertemplate*{footline}{rtg footline}
+{
+    \ifNoFoot 
+        \leavevmode%
+        \hbox{%
+        \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+            % empty environment to raise height
+        \end{beamercolorbox}}%
+        \vskip0pt%
+    \else
+        \ifnum \insertpagenumber=1
+            \leavevmode%
+            \hbox{%
+            \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+                % empty environment to raise height
+            \end{beamercolorbox}}%
+            \vskip0pt%
+        \else
+            \leavevmode%
+            \hbox{%
+            \begin{beamercolorbox}[wd=.07\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+                \usebeamerfont{title in head/foot}%empty for symmetry
+            \end{beamercolorbox}%
+            \begin{beamercolorbox}[wd=.26\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+                \usebeamerfont{title in head/foot}\insertshortauthor{} (\insertshortinstitute)
+            \end{beamercolorbox}%
+            \begin{beamercolorbox}[wd=.34\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+                \usebeamerfont{title in head/foot}\insertshorttitle
+            \end{beamercolorbox}%
+            \begin{beamercolorbox}[wd=.26\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
+                \usebeamerfont{title in head/foot}\insertshortdate
+            \end{beamercolorbox}%
+            \begin{beamercolorbox}[wd=.07\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
+                \ifNoPageNumber
+                    % empty environment
+                \else
+                    \usebeamerfont{title in head/foot}\insertframenumber{} / \inserttotalframenumber
+                \fi
+            \end{beamercolorbox}}%
+            \vskip0pt%
+        \fi
+    \fi
+}
+
+% Set head
+\defbeamertemplate*{headline}{rtg headline}
+{
+    \ifnum \insertpagenumber=1
+        \leavevmode%
+        \hbox{%
+        \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+            % empty environment to raise height
+        \end{beamercolorbox}}%
+        \vskip2pt%
+    \else
+        \leavevmode%
+        \hbox{%
+        \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,right]{section in head/foot}%
+            \usebeamerfont{title in head/foot}\insertsectionhead\hspace*{2ex}
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,left]{subsection in head/foot}%
+            \usebeamerfont{title in head/foot}\hspace*{2ex}\insertsubsectionhead
+        \end{beamercolorbox}}%
+        \vskip2pt%
+    \fi
+}
+
+% Section pages
+\defbeamertemplate*{section page}{progressbar}{
+    \centering
+    \begin{minipage}{22em}
+        \raggedright
+        \usebeamercolor[rtg_darkblue]{section title}
+        \usebeamerfont{section title}
+        \insertsectionhead\\[-1ex]
+        \usebeamertemplate*{progress bar in section page}
+        \par
+        \ifx\insertsubsectionhead\@empty\else%
+            \usebeamercolor[rtg_lightblue]{subsection title}%
+            \usebeamerfont{subsection title}%
+            \insertsubsectionhead
+        \fi
+    \end{minipage}
+    \par
+    \vspace{\baselineskip}
+}
+
+\AtBeginSection{
+    \ifSectionPage
+        \ifNoBackgroundSections
+            \frame[plain,c,noframenumbering]{\sectionpage}
+        \else
+            {\usebackgroundtemplate{\includegraphics[height=\paperheight]{beamerthemeRTG2583_images/background_rtg.png}}
+                \frame[plain,c,noframenumbering]{\sectionpage}}
+        \fi
+    \fi
+}
+
+\setbeamertemplate{subsection page}{%
+    \usebeamertemplate*{section page}
+}
+
+\AtBeginSubsection{
+    \ifSubsectionPage
+        \ifNoBackgroundSections
+            \frame[plain,c,noframenumbering]{\subsectionpage}
+        \else
+            {\usebackgroundtemplate{\includegraphics[height=\paperheight]{beamerthemeRTG2583_images/background_rtg.png}}
+                \frame[plain,c,noframenumbering]{\subsectionpage}}
+        \fi
+    \fi
+}
+
+\newlength{\actualprogess}
+\newlength{\progressbarlinewidth}
+\setlength{\progressbarlinewidth}{2pt}
+\setbeamertemplate{progress bar in section page}{
+    \setlength{\actualprogess}{%
+        \textwidth * \ratio{\insertframenumber pt}{\inserttotalframenumber pt}%
+    }%
+    \begin{tikzpicture}
+        \fill[rtg_darkblue] (0,0) rectangle (\textwidth, \progressbarlinewidth);
+        \fill[rtg_lightblue] (0,0) rectangle (\actualprogess, \progressbarlinewidth);
+    \end{tikzpicture}%
+}
