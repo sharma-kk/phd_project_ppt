@@ -9,7 +9,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-% \usepackage{microtype}
+\usepackage{microtype}
 \usepackage{amsmath, amsfonts, amssymb, amsthm}
 \usepackage[justification=centering]{caption} %
 \captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
@@ -27,6 +27,7 @@
 \usepackage{dsfont} % for indicator function 
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{soul} % strikethrough text
 \usepackage{biblatex}
 \addbibresource{literature.bib}
 % Custom commands
@@ -48,7 +49,6 @@
     arr/.style={thick,-stealth}
     } % for the flow chart
 %Title setup
-%Title setup
 \title[PhD project]{Technical Talk - PhD Project}
 \subtitle{}
 \author[Kamal Sharma]{Kamal Sharma}
@@ -69,22 +69,357 @@
 \begin{itemize}
     \item<2-> \textcolor{orange}{Climate model:} set of equations modeling climatic events/processes
     \begin{itemize}
-        \item<3-> Our model: simulates ocean-atmosphere interactions
+        \item<2-> Our model: simulates ocean-atmosphere interactions
     \end{itemize}
     \vspace{0.1cm}
-    \item<4-> \textcolor{orange}{Idealized:} we make approximations!
+    \item<3-> \textcolor{orange}{Idealized:} we make approximations!
     \begin{itemize}
-        \item<5-> 2D model: solves for velocity, temperature, and pressure
+        \item<4-> 2D model: solves for velocity, temperature, and pressure
     \end{itemize}
     \vspace{0.1cm}
-    \item<6-> \textcolor{orange}{Stochastic:} has stochastic/random terms (think of Brownian motion)
+    \item<5-> \textcolor{orange}{Stochastic:} has stochastic/random terms (think of Brownian motion)
     \vspace{0.1cm}
-    \item<7-> \textcolor{purple}{Structure-preserving:} preserves underlying geometric and physical structure
+    \item<6-> \textcolor{purple}{Structure-preserving:} preserves underlying geometric and physical structure
     \vspace{0.1cm}
-    \item<8-> \textcolor{teal}{Development:} modeling, analysis, and \textcolor{teal}{simulation}
+    \item<7-> \textcolor{teal}{Development:} modeling, analysis, and \textcolor{teal}{simulation}
 \end{itemize} 
 \vspace{5mm}
-\onslide<9>{\large \textbf{We are solving stochastic PDEs which model ocean-atmosphere interactions!}}
+\onslide<8>{\large \textbf{We are solving stochastic PDEs which model ocean-atmosphere interactions!}}
 \end{frame}
+\subsection{Why add stochastic terms?}
+\begin{frame}{Multiscale phenomena}
+\begin{itemize}
+    \onslide<1->{
+    \item Earth's oceans and atmosphere are characterized by a rich hierarchy of interacting processes
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.35\linewidth]{images/multiscale_pheno.pdf}
+        \vspace{-.3cm}
+        \caption{Spatial and temporal scales of various meteorological phenomena\footfullcite{stullPracticalMeteorologyAlgebrabased2017}}
+    \end{figure}}
+    % \vspace{-.4cm}
+    \item<2-> Numerical models have fixed resolution
+    \item<2-> Processes occurring below the model resolution are not captured $\rightarrow$ leads to prediction error!
+    \item<3-> \textbf{Solution}: Parameterization or subgrid-scale modeling
+\end{itemize}
+\end{frame}
+\begin{frame}{Parameterization}
+\begin{itemize}
+    \item<1-> Additional terms are added to account for the missing effect of unresolved/small scales
+    \item<2-> Parameterization techniques can be divided into two categories:
+    \begin{enumerate}
+        \item<2-> Deterministic
+        \item<2-> Stochastic
+    \end{enumerate}
+    \item<3-> We explored \textbf{stochastic parameterization} : {stochastic advection by Lie transport}\footfullcite{holmVariationalPrinciplesStochastic2015} (SALT)
+    \vspace{2mm}
+    \item<4-> Why \textbf{SALT}? 
+    \begin{itemize}
+        \item<4-> Structure preservation
+        \item<4-> Better uncertainty quantification skills
+        \item<4-> Data-driven approach
+    \end{itemize}
+\end{itemize}
+\end{frame}
+\section{Research objectives}
+\begin{frame}{Objectives}
+\begin{enumerate}
+    \onslide<1->{
+    \item Explore the efficacy of stochastic parameterization (in terms of UQ skills) for a climate model
+    \begin{itemize}
+        \item Previous studies focused on Euler, quasi-geostrophic, and shallow water equations
+    \end{itemize}
+    \vspace{.2cm}
+    \item Numerically solve the idealized stochastic climate model}
+    \vspace{.2cm}
+    \item \only<1> {How to model the noise/stochastic term effectively?}
+    \only<2> {\st{How to model the noise/stochastic term effectively?}}
+    % \begin{itemize}
+    %     \item Are there better ways to calibrate the stochastic model?
+    % \end{itemize}
+    \vspace{.2cm}
+    \item \only<1> {Compare the stochastic model results with other existing models/approaches}
+    \only<2> {\st{Compare the stochastic model results with other existing models}}
+\end{enumerate}    
+\end{frame}
+\section{The climate model}
+\begin{frame}{Model equations}
+  \onslide<1-> 2D climate model equations\footfullcite{crisanImplementationHasselmannsParadigm2023}:
+\begin{columns}[T] % align columns
+\begin{column}{.65\textwidth}
+% \begin{itemize}
+    % \item<1-> 2D climate model equations\footfullcite{crisanImplementationHasselmannsParadigm2023}:
+    \begin{footnotesize}
+    \begin{align*}
+            \text{Atmosphere}: \ &\deriv \mathbf{u}^a + ((\mathbf{u}^a \deriv t + \textcolor{violet}{\sum_i \boldsymbol{\xi}_i \circ \deriv W^i})\cdot \nabla) \mathbf{u}^a + \frac{1}{Ro^a} \hat{\mathbf{z}} \times (\mathbf{u}^a\deriv t + \textcolor{violet}{\sum_i \boldsymbol{\xi}_i \circ \deriv W^i}) \\
+                &\quad \quad + \textcolor{violet}{\sum_i (u_1^a \nabla \xi_{i,1} + u_2^a \nabla \xi_{i,2} )\circ \deriv W^i} = (-\frac{1}{C^a} \nabla \theta + \frac{1}{Re^a} \Delta \mathbf{u}^a) \deriv t, \\
+        &\deriv \theta^a + \nabla\cdot(\theta^a (\mathbf{u}^a\deriv t + \textcolor{violet}{\sum_i \boldsymbol{\xi}_i \circ \deriv W^i})) = (\textcolor{brown}{\gamma(\theta^a - \theta^o)} + \frac{1}{Pe^a} \Delta \theta^a )\deriv t,
+        \end{align*}
+        \begin{align*}
+        \text{Ocean}: \ &\frac{\partial \mathbf{u}^o}{\partial t} + (\mathbf{u}^o\cdot \nabla)\mathbf{u}^o + \frac{1}{Ro^o} \hat{\mathbf{z}} \times \mathbf{u}^o + \frac{1}{Ro^o} \nabla p^a = \textcolor{brown}{\sigma(\mathbf{u}^o - \mathbb{E}\mathbf{u}_{sol}^a)} + \frac{1}{Re^o} \Delta \mathbf{u}^o,\\
+            & \nabla \cdot \mathbf{u}^o = 0,\\
+            &\frac{\partial \theta^o}{\partial t} + \mathbf{u}^o \cdot \nabla \theta^o = \frac{1}{Pe^o} \Delta \theta^o.
+    \end{align*}
+    \end{footnotesize}
+% \item Our goal is to numerically solve the model equations!
+% \end{itemize}
+\end{column}%
+\hfill%
+\begin{column}{.30\textwidth}
+% \vspace{.5cm}
+\onslide<1->{
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{images/domain.pdf}
+    \caption{Model domain}
+\end{figure}
+$\mathbf{u}:$ velocity, $\theta:$ temperature $p:$ pressure\\ $Re:$ Reynolds number \\ $Pe:$ P\'{e}clet number\\ $Ro:$ Rossby number \\
+$\sigma, \gamma:$ coupling coefficients}
+\end{column}%
+\end{columns}
+\end{frame}
+\begin{frame}
+    \frametitle{How to get the stochastic terms?}
+    \begin{itemize}
+        \onslide<1->{
+        \item Difference between Lagrangian trajectories at different resolutions:
+        $$\textcolor{violet}{\sum_i \boldsymbol{\xi}_i ~ \deriv W^i} \approx \mathbf{u}_{true}~\deriv t - {\mathbf{u}}~ \deriv t$$ $\mathbf{u}_{true}:$ true velocity \\
+    ${\mathbf{u}}:$ mean flow velocity i.e. the large-scale component of $\mathbf{u}_{true}$
+    \vspace{.5cm}
+    \item Ways to estimate the true velocity $\mathbf{u}_{true}$:
+    \begin{enumerate}
+        \item Observation data (for example, from satellites)
+        \item Synthetic data (from high-resolution numerical simulations)
+    \end{enumerate}
+    \vspace{.5cm}}
+    \onslide<2->{
+    \item \textbf{We use synthetic data!}}
+    \end{itemize}
+\end{frame}
+\begin{frame}{Our methodology}
+\begin{figure}
+    \centering
+    \resizebox{1\textwidth}{!}{
+        \begin{tikzpicture}[node distance=1cm]
+        \node[process1] (main) {\textbf{Coupled ocean-atmosphere climate model}};
+        \node[left = of main, xshift=.9cm] {\large{\textbf{4}}};
+        \node[below left =1.5cm and -.3cm of main,process2,text width=5cm] (ocean) {\textbf{Idealized Ocean model}};
+        \node[left = of ocean, xshift=.9cm] {\large{\textbf{1}}};
+        \node[below right =1.5cm and -.3cm of main,process3,text width=6cm] (atmo) {\textbf{Deterministic atmosphere model}\\
+        \begin{itemize}
+            \item Standard Galerkin: $\mathbf{u} \in \mathbb{P}_1,~ \theta \in \mathbb{P}_1 $
+            \item Crank Nicolson time-stepping
+        \end{itemize}
+        };
+        \node[left = of atmo, xshift=.9cm] {\large{\textbf{2}}};
+        \node[below left = 1.5cm and -1cm of ocean,process2,text width=6.5cm] (NS) {\textbf{2D incompressible Navier-Stokes equation} \\
+        \begin{itemize}
+            \item Scott-Vogelius Finite elements, $(\mathbf{u},p) \in \mathbb{P}_2\times\mathbb{P}_{1}^{\text{disc}}$ on barycentric mesh
+            \item Crank-Nicolson time-stepping
+        \end{itemize}};
+        \node[left = of NS, xshift=.9cm] {\large{\textbf{1a}}};
+        \node[below right = 1.5cm and -1cm of ocean,process2,text width=6.5cm] (adv) {\textbf{Advection diffusion equation}\\
+        \begin{itemize}
+            \item Standard Galerkin method, $\theta \in \mathbb{P}_1$
+            % \item Spurious oscillations $\rightarrow$ adjust diffusion coefficient according to mesh
+            \item Crank-Nicolson time-stepping
+            \end{itemize}};
+        \node[left = of adv, xshift=.9cm] {\large{\textbf{1b}}};
+        % \node[below = of NS,process2, yshift=-.02cm, text width=6.5cm] (stoNS) {\textbf{Stochastic Navier-Stokes equations} \\ 
+        % \begin{itemize}
+        %     \item Model calibration
+        %     \item Uncertainty quantification
+        % \end{itemize}};
+        % \node[left = of stoNS, xshift=.9cm] {\large{\textbf{3}}};
+        \node[below = of atmo,process3, yshift=-.5cm,text width=6cm] (sto_atmo) {\textbf{Stochastic atmosphere model}\\
+        \begin{itemize}
+            \item Same FE spaces as deterministic
+            \item Stochastic Crank-Nicolson for time
+        \end{itemize}};
+        \node[left = of sto_atmo, xshift=.9cm] {\large{\textbf{3}}};
+    
+        \draw[arr] (main.south) --++ (0,-20pt) -| (ocean) node[pos=0.0,below]{\textit{Decoupling}};
+        \draw[arr] (main.south) --++ (0,-20pt) -| (atmo);
+        \draw[arr] (ocean.south) --++ (0,-20pt) -| (NS);
+        \draw[arr] (ocean.south) --++ (0,-20pt) -| (adv);
+        % \draw[arr] (NS) -- node[anchor=west] {\textit{SALT}} (stoNS);
+        \draw[arr] (atmo) -- node[anchor=west] {\textit{SALT}} (sto_atmo);
+    \end{tikzpicture}
+    }
+    \end{figure}
+    We used an open-source Python Finite Element package for numerical implementation and simulation
+\end{frame}
+\section{Numerical simulation of the climate model}
+\begin{frame}{Deterministic model simulation and model calibration}
+\begin{itemize}
+    \item We run the climate model in high-res. ($\Delta x = 1/128 \sim 30 ~ \text{km}$) for 45 time units ($\sim 25 ~ \text{days}$)
+    
+    \vspace{-.2cm}
+    \begin{figure}
+    \captionsetup[subfigure]{labelformat=empty}
+    \centering
+    % First image
+    \begin{subfigure}{1\textwidth}
+        \centering
+        \caption{Initial condition}
+        \includegraphics[width=0.7\linewidth]{images/cm_t0.png}
+        
+    \end{subfigure}
+    % Arrow between images
+    \tikz[yshift=3pt]\draw[ thick,->] (0,0) -- ++(0,-0.25);
+    % \tikz[yshift=5pt]\draw[thick,->] 
+    % (0,0) -- ++(0,-0.5) node[midway,right]{After 45 time units};
+    % Second image
+    \begin{subfigure}{1\textwidth}
+        \centering
+        \caption{At t=45}
+        \includegraphics[width=0.7\linewidth]{images/cm_t45.png}
+    \end{subfigure}
+    \end{figure}
+    \item Analyze data $\rightarrow$ extract small-scale features (using statistical algorithms) $\rightarrow$ obtain $\boldsymbol{\xi}_i$
+    \end{itemize}
+\end{frame}
+\subsection{Stochastic model simulation}
+\begin{frame}{Stochastic model simulation}
+\begin{itemize}
+    \item We run the stochastic model on a coarse grid ($\Delta x = 1/32 ~ \sim 120 ~ \text{km}$) 
+    \item Initial conditions correspond to coarse grained velocity and temperature fields at $t=25$ 
+\end{itemize}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=0.45\linewidth]{images/cg_atm_temp_t25.pdf}
+        \includegraphics[width=0.45\linewidth]{images/cg_atm_vel_t25.pdf}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=0.45\linewidth]{images/cg_ocean_temp_t25.pdf}
+        \includegraphics[width=0.45\linewidth]{images/cg_ocean_vel_t25.pdf}
+    \end{subfigure}
+\end{figure} 
+% \item Atmospheric vorticity at $t=25$:
+\begin{figure}
+    \centering
+    \caption{Atmospheric vorticity at $t=25$}
+    % \vspace{-.4cm}
+    \includegraphics[width=0.5\linewidth]{images/cg_atm_vort_t25.pdf}
+\end{figure}
+\end{frame}
+\begin{frame}{Simulation results}
+\begin{itemize}
+    \item Stochastic model is simulated for 20 time units ($t=25$ to $t=45$)
+    % \item 53 $\boldsymbol{\xi}_i$ out of 500 (which explains 99 $\%$ of the total variance) are used
+    \item Stochastic vs. deterministic (without parameterization) model results at $t=35$
+\end{itemize}
+% \vspace{-.5cm}
+\begin{columns}[T] % align columns
+\begin{column}{.48\textwidth}
+        \begin{figure}
+        \captionsetup[subfigure]{labelformat=empty}
+            \centering
+            \begin{subfigure}[b]{.85\textwidth}
+            \caption{Particle 1}
+            \vspace{-.2cm}
+            \includegraphics[width=1\linewidth]{images/vort_stoch_p1_same_99_var_ic_at_t35.pdf}
+            \end{subfigure}
+            \vspace{.2cm}
+            \begin{subfigure}[b]{.85\textwidth}
+            \caption{Particle 2}
+            \vspace{-.2cm}
+            \includegraphics[width=1\linewidth]{images/vort_stoch_p2_same_99_var_ic_at_t35.pdf}
+            \end{subfigure}
+            \vspace{.2cm}
+            \begin{subfigure}[b]{.85\textwidth}
+            \caption{Particle 3}
+            \vspace{-.2cm}
+            \includegraphics[width=1\linewidth]{images/vort_stoch_p3_same_99_var_ic_at_t35.pdf}
+            \end{subfigure}
+        \end{figure}
+\end{column}%
+\hfill%
+\begin{column}{.48\textwidth}
+        \begin{figure}
+        \captionsetup[subfigure]{labelformat=empty}
+            \centering
+            \begin{subfigure}[b]{.85\textwidth}
+            \caption{Deterministic solution}
+            \vspace{-.2cm}
+            \includegraphics[width=1\linewidth]{images/vort_det_same_ic_at_t35.pdf}
+            \end{subfigure}
+            \vspace{.2cm}
+            \begin{subfigure}[b]{.85\textwidth}
+            \caption{\textbf{True solution}}
+            \vspace{-.2cm}
+            \includegraphics[width=1\linewidth]{images/vort_truth_at_t35.pdf}
+            \end{subfigure}
+        \end{figure}
+\end{column}%
+\end{columns}
+\end{frame}
+\begin{frame}{Simulation results}
+    \begin{itemize}
+        \item<1-> Comparison between the stochastic ($\mu$ $\pm ~1 \sigma$) and deterministic sol. at 6 grid points:
+        \onslide<1->{\begin{figure}
+        \centering
+        \caption{\textbf{Atmospheric velocity }($x$ component)}
+        % \vspace{-.1cm}
+        \includegraphics[width=0.7\linewidth]{images/cm_res_32_atm_ux_var_99_part_50_t25_onwards_ppt.pdf}
+        \end{figure}}
+    \end{itemize} 
+        \begin{enumerate}
+            \item<1-> Ensemble spread increases over time
+            \item<1-> Stochastic model captures the truth for 5 to 10 time units
+        \end{enumerate}
+    
+\end{frame}
+\begin{frame}{Uncertainty quantification}
+    \begin{itemize}
+        \item Plots for the evolution of ensemble spread and RMSE at six different locations on the grid
+        \begin{figure}
+        \centering
+        \caption{\textbf{RMSE vs. spread} for $u^a_x$}
+        % \vspace{-.2cm}
+        \includegraphics[width=0.65\linewidth]{images/spread_rmse_res_32_atm_ux_var_99_part_50_t25_onwards_ppt.pdf}
+        \end{figure}
+        \item The size of ensemble spread is proportional to the RMSE (for at least 15 time units)
+        \item Error in the stochastic solution can be estimated by its own spread 
+        \begin{itemize}
+            \item SPDE solution is suitable for data assimilation methods!
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+\section{Summary}
+    \begin{frame}{Summary \& outcomes}
+    \begin{itemize}
+        \item \textcolor{rtg_darkblue}{Aim:} solve a stochastic coupled ocean-atmosphere climate model
+        \vspace{.2cm}
+        \item \textcolor{rtg_darkblue}{Novelty:} Data-driven model
+        \begin{itemize}
+            \item stochastic terms (modelling unresolved processes) are obtained from observation data
+            \item has desired properties: structure-preservation
+            \item We used high-res. model sim. data to estimate $\boldsymbol{\xi}_i$ $\rightarrow$ data analysis $\&$ statistical modelling
+        \end{itemize} 
+        \vspace{.2cm}
+        \item \textcolor{rtg_darkblue}{Methodology} for solving the model equations:
+        \begin{itemize}
+            \item Solve simpler models first
+            \item build the climate model step-by-step
+            \item verify numerical schemes at each step
+        \end{itemize}
+        \vspace{.2cm}
+        \item \textcolor{rtg_darkblue}{Results:}
+        \begin{itemize}
+            \item Stochastic model solution capture the truth for some time units
+            \item Shows promising UQ test results: ensemble spread size $\propto$ RMSE
+        \end{itemize}
+        \vspace{.2cm}
+        \item \textcolor{rtg_darkblue}{Outcome:} first step towards using SALT in a highly complex coupled system!
+    \end{itemize}
+\end{frame}
+\begin{frame}[plain,c,noframenumbering]
+    \centerline{\color{rtg_darkblue}\huge{Thank you for your attention!}}
+  \end{frame}
+\appendix
 \end{document}
 
