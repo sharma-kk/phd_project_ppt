@@ -413,9 +413,151 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion equations
         \item \textcolor{rtg_darkblue}{Outcome:} first step towards using SALT in a highly complex coupled system!
     \end{itemize}
 \end{frame}
-\begin{frame}[plain,c,noframenumbering]
-    \centerline{\color{rtg_darkblue}\huge{Thank you for your attention!}}
-  \end{frame}
+% \begin{frame}[plain,c,noframenumbering]
+%     \centerline{\color{rtg_darkblue}\huge{Thank you for your attention!}}
+%   \end{frame}
 \appendix
+\section{Additional slides}
+\begin{frame}{What is Stochastic Advection by Lie Transport (SALT)?}
+\begin{columns}[T]
+    \begin{column}{.7\textwidth}
+    \begin{itemize}
+    \item Assumption (in the deterministic approach): fluid particles follow
+    \begin{equation*}
+        \frac{\deriv \vect{X}(a,t)}{\deriv t} = \mathbf{u}(\vect{X}(a,t),t), \quad \vect{X}(a,0) = a \in \mathbb{R}^2 \ \text{or} \ \mathbb{R}^3,
+    \end{equation*}
+    $\vect{X}(a,t):$ particle trajectory (with Lagrangian label $a$) \\
+    $\mathbf{u}:$ velocity field
+    \end{itemize}
+    \end{column}
+    \hfill
+    \begin{column}{.3\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=1\linewidth]{images/fluid_path.png}
+        \end{figure}
+    \end{column}
+\end{columns}
+% \vspace{.3cm}
+\begin{itemize}
+    \item In the SALT approach, Lagrangian particle paths follow a Stratonovich stochastic process
+    \begin{equation*}
+        \deriv \vect{X}(a,t) = \overline{\mathbf{u}}(\vect{X}(a,t)) \deriv t + \sum_i \boldsymbol{\xi}_i(\vect{X}(a,t))\circ \deriv W_t^i,
+    \end{equation*}
+    $\overline{\mathbf{u}}$: mean flow velocity \hspace{.8cm} $\sum_i \boldsymbol{\xi}_i(\vect{X}(a,t))\circ \deriv W_t^i$: stochastic perturbation about the mean flow\\
+    $W_t^i$: Ind. Wiener processes \hspace{.8cm}$\boldsymbol{\xi_i}$: spatial correlation of the small-scale velocity fluctuations
+    \item Fluid dynamics equations are derived based on this assumption
+\end{itemize}
+\end{frame}
+\begin{frame}{Estimation of $\boldsymbol{\xi}_i$ from high resolution data}
+\onslide<1->{
+$$(\mathbf{u} - \overline{\mathbf{u}}) \Delta t \approx \sum_{i=1}^N \boldsymbol{\xi}_i \Delta W^i_m$$}
+\begin{itemize}
+\item $W^i$: Brownian motion $\rightarrow$ $\Delta W^i_m$: normal distribution with $\mu = 0$ and $\sigma^2 = \Delta t$
+\vspace{.5cm}
+  \[
+  \left[ {\begin{array}{cccc}
+    \Delta X_{11} & \Delta X_{12} & \cdots & \Delta X_{1n}\\
+    \Delta X_{21} & \Delta X_{22} & \cdots & \Delta X_{2n}\\
+    \vdots & \vdots & \ddots & \vdots\\
+    \Delta X_{m1} & \Delta X_{m2} & \cdots & \Delta X_{mn}\\
+  \end{array} } \right] \xrightarrow{\textbf{SVD}} \left[
+  \begin{array}{cccc}
+    \vertbar & \vertbar &        & \vertbar \\
+    a_{1}    & a_{2}    & \ldots & a_{r}    \\
+    \vertbar & \vertbar &        & \vertbar 
+  \end{array}
+\right] \left[
+  \begin{array}{ccc}
+    \horzbar & v^{T}_{1} & \horzbar \\
+    \horzbar & v^{T}_{2} & \horzbar \\
+             & \vdots    &          \\
+    \horzbar & v^{T}_{r} & \horzbar
+  \end{array}
+\right]
+\]
+
+    \item Elements of time-series $a_i$ are generally modeled using a normal distribution ($\mu = 0$, $\sigma^2 = \Delta t$)
+    \item $v_i^T$ represent the spatial correlation of the unresolved small-scale dynamics and hence are the $\boldsymbol{\xi}_i$
+    \item Only a few $\boldsymbol{\xi}$'s are needed to simulate most of the variance in $(\mathbf{u} - \overline{\mathbf{u}}) \Delta t$ data
+\end{itemize}
+\end{frame}
+\begin{frame}{Stochastic versus deterministic ensemble}
+\begin{itemize}
+    \item How to quantify uncertainty due to unresolved scales with deterministic models?
+    \item Perturb the atmosphere velocity field at $t=25$ to create an ensemble of initial conditions
+    $$\mathbf{u}_{\text{pert}} = \mathbf{u}_0 + 0.2\times r \times \mathbf{u}_0, \qquad  \mathbf{u}_0: \text{Initial velocity field}, \quad r \in \mathcal{N}(0,1) $$
+    \item Comparison between 50 independent realizations of the deterministic and stochastic model
+   \begin{figure}
+        \centering
+        % \caption{\textbf{Velocity} $x$ \textbf{component} (atmosphere)}
+        \includegraphics[width=0.6\linewidth]{images/uq_ux_det_v_stoch_50_part_var_99_ensem_ppt.pdf}
+        \end{figure}
+        \item Stochastic model exhibits bigger spreads $\rightarrow$ true solution stays inside the spread for longer
+\end{itemize}
+    
+\end{frame}
+\begin{frame}{Uncertainty Quantification (UQ) skills}
+\begin{itemize}
+    \item Comparison between the ensemble spread and RMSE for atmospheric velocity ($x$ component)
+     \begin{figure}
+        \centering
+        % \caption{\textbf{Velocity} $x$ \textbf{component} (atmosphere)}
+        \includegraphics[width=0.6\linewidth]{images/uq_spread_rmse_ux_det_ensem_v_sto_ensem_t25_onwards_rand_ic_ppt.pdf}
+        \end{figure}
+    \begin{itemize}
+        \item Both models have good UQ skills (for at least 10 to 15 time units)
+        \item Stochastic model indeed exhibits larger spreads
+        \item RMSE of stochastic > RMSE of deterministic
+    \end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{UQ skill comparison}
+    \begin{itemize}
+    \item Average spread size and average RMSE comparison:
+    \begin{figure}
+    \centering
+    \begin{subfigure}{.4\textwidth}
+    \centering
+    \includegraphics[width=1\textwidth]{images/uq_avg_spread_ux_det_ensem_v_sto_ensem_t25_onwards_rand_ic.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.4\textwidth}
+    \centering
+          \includegraphics[width=1\textwidth]{images/uq_avg_rmse_ux_det_ensem_v_sto_ensem_t25_onwards_rand_ic.pdf}
+    \end{subfigure}
+    \end{figure}
+    \item Stochastic model exhibits bigger spread size but also higher RMSE!
+    \item \textbf{Which model has better prediction skills?}
+    \end{itemize}
+    \end{frame}
+    \begin{frame}{Continuous Ranked Probability Score}
+        \begin{itemize}
+            \item Continuous Ranked Probability Score (CRPS) evaluates the accuracy of the entire predicted probability distribution against the observed value
+            $$ \text{crps} (F,y) = \int_{-\infty}^{\infty} (F(x) - \mathds{1}(x \geq y))^2 \ \deriv x,$$
+            $F(x): \text{Forecast CDF}, \quad  y: \text{Observation}, \quad \mathds{1}: \text{Heavyside step function}$
+            \item CRPS plots comparing the performance of the stochastic and the deterministic ensemble:
+            \begin{figure}
+            \centering
+            \begin{subfigure}{.3\textwidth}
+            \centering
+              \includegraphics[width=1\textwidth]{images/crps_velx_det_v_stoch_ensem_50_part_var_99_ensem.pdf}
+            \end{subfigure}
+            \begin{subfigure}{.3\textwidth}
+            \centering
+              \includegraphics[width=1\textwidth]{images/crps_vely_det_v_stoch_ensem_50_part_var_99_ensem.pdf}
+            \end{subfigure}
+            \begin{subfigure}{.3\textwidth}
+            \centering
+                  \includegraphics[width=1\textwidth]{images/crps_temp_det_v_stoch_50_part_var_99_ensem_ppt.pdf}
+            \end{subfigure}
+            \label{fig: crps stoch v det ensem}
+            \end{figure}
+            \item \textbf{Stochastic parameterization produces better forecasts} than the deterministic approach
+            \begin{itemize}
+                \item Physics-based model
+                \item Produces bigger spreads, captures the truth for longer $\rightarrow$ more suitable for data assimilation
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
 \end{document}
 
