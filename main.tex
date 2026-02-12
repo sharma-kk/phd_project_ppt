@@ -64,88 +64,81 @@
 \end{frame}
 \section{Introduction}
 \begin{frame}{What is it about?}
-\onslide<1->{\large \textcolor{teal}{Development} of a \textcolor{purple}{structure-preserving} \textcolor{orange}{idealized} \textcolor{orange}{stochastic climate model}}
+\onslide<1->{\large \textcolor{teal}{Development} of a \textcolor{purple}{structure-preserving} \textcolor{orange}{idealized} \textcolor{orange}{stochastic climate model}
 \vspace{5mm}
 \begin{itemize}
-    \item<2-> \textcolor{orange}{Climate model:} set of equations modeling climatic events/processes
-    \begin{itemize}
-        \item<2-> Our model: simulates ocean-atmosphere interactions
-    \end{itemize}
-    \vspace{0.1cm}
-    \item<3-> \textcolor{orange}{Idealized:} we make approximations!
-    \begin{itemize}
-        \item<3-> 2D model: solves for velocity, temperature, and pressure
-    \end{itemize}
-    \vspace{0.1cm}
-    \item<4-> \textcolor{orange}{Stochastic:} has stochastic/random terms (think of Brownian motion)
-    \vspace{0.1cm}
-    \item<5-> \textcolor{purple}{Structure-preserving:} preserves underlying geometric and physical structure
-    \vspace{0.1cm}
-    \item<6-> \textcolor{teal}{Development:} modeling, analysis, and \textcolor{teal}{simulation}
+    \item \textcolor{orange}{Climate model:} set of equations modelling coupled ocean-atmosphere dynamics
+    \vspace{0.2cm}
+    \item \textcolor{orange}{Idealized:} 2D model $\rightarrow$ solves for velocity, temperature, and pressure
+    \vspace{0.2cm}
+    \item \textcolor{orange}{Stochastic:} has stochastic/random terms (think of Brownian motion)
+    \vspace{0.2cm}
+    \item \textcolor{purple}{Structure-preserving:} preserves underlying geometric and physical structure
+    % \item<6-> \textcolor{teal}{Development:} modeling, analysis, and \textcolor{teal}{simulation}
 \end{itemize} 
-\vspace{5mm}
-\onslide<7>{\large \textbf{We are solving stochastic PDEs which model ocean-atmosphere interactions!}}
+\vspace{.5cm}}
+\onslide<2>{\large \textbf{We are solving stochastic PDEs which model ocean-atmosphere interactions!}}
 \end{frame}
 \subsection{Why add stochastic terms?}
 \begin{frame}{Multiscale phenomena}
-\begin{itemize}
-    \onslide<1->{
-    \item Earth's oceans and atmosphere are characterized by a rich hierarchy of interacting processes
     \begin{figure}
         \centering
         \includegraphics[width=0.35\linewidth]{images/multiscale_pheno.pdf}
         \vspace{-.3cm}
         \caption{Spatial and temporal scales of various meteorological phenomena\footfullcite{stullPracticalMeteorologyAlgebrabased2017}}
-    \end{figure}}
+    \end{figure}
+\begin{itemize}
+    \onslide<1->{
+    % \item Earth's oceans and atmosphere are characterized by a rich hierarchy of interacting processes
     % \vspace{-.4cm}
-    \item<2-> Numerical models have fixed resolution
-    \item<2-> Processes occurring below the model resolution are not captured $\rightarrow$ leads to prediction error!
-    \item<3-> \textbf{Solution}: Parameterization or subgrid-scale modeling
+    \item Numerical models have fixed resolution
+    \item Processes occurring below the model resolution are not captured $\rightarrow$ leads to prediction error!}
+    \item<2-> \textbf{Solution}: Parameterization or subgrid-scale modeling
 \end{itemize}
 \end{frame}
 \begin{frame}{Parameterization}
 \begin{itemize}
     \item<1-> Additional terms are added to account for the missing effect of unresolved/small scales
-    \item<2-> Parameterization techniques can be divided into two categories:
+    \item<1-> Parameterization techniques can be divided into two categories:
     \begin{enumerate}
-        \item<2-> Deterministic
-        \item<2-> Stochastic
+        \item<1-> Deterministic
+        \item<1-> Stochastic
     \end{enumerate}
-    \item<3-> We explored \textbf{stochastic parameterization} : {stochastic advection by Lie transport} (SALT)
-    \vspace{2mm}
-    \item<4-> Why {SALT}? 
+    \vspace{.2cm}
+    \item<2-> We explored \textbf{stochastic parameterization} : {stochastic advection by Lie transport} (SALT)
+    \item<2-> Why {SALT}? 
     \begin{itemize}
-        \item<4-> preserves structure $\rightarrow$ conservation properties still hold
-        \item<4-> better forecast skills $\rightarrow$ uncertainty due to unresolved transport processes can be quantified
-        \item<4-> conducive to data-driven approaches $\rightarrow$ can be estimated from observations/satellite data
+        \item<2-> preserves physical structure $\rightarrow$ reliable long simulations
+        \item<2-> better forecast skills $\rightarrow$ uncertainty due to unresolved transport processes can be quantified
+        \item<2-> conducive to data-driven approaches $\rightarrow$ can be estimated from observations/satellite data
     \end{itemize}
     % \item<4-> The stochastic terms models the unresolved transport processes! 
 \end{itemize}
 \end{frame}
 \section{Research objectives}
-\begin{frame}{Objectives}
+\begin{frame}{Main objectives}
 \begin{enumerate}
     \onslide<1->{
     \item Explore the efficacy of stochastic parameterization (in terms of UQ skills) for a climate model
     \begin{itemize}
         \item Previous studies focused on Euler, quasi-geostrophic, and shallow water equations
     \end{itemize}
-    \vspace{.2cm}
+    \vspace{.5cm}
     \item Numerically solve the idealized stochastic climate model}
-    \vspace{.2cm}
-    \item \only<1> {How to model the noise/stochastic term effectively?}
-    \only<2> {\st{How to model the noise/stochastic term effectively?}}
-    % \begin{itemize}
-    %     \item Are there better ways to calibrate the stochastic model?
-    % \end{itemize}
-    \vspace{.2cm}
-    \item \only<1> {Compare the stochastic model results with other existing models/approaches}
-    \only<2> {\st{Compare the stochastic model results with other existing models/approaches}}
+    % \vspace{.2cm}
+    % \item \only<1> {How to model the noise/stochastic term effectively?}
+    % \only<2> {\st{How to model the noise/stochastic term effectively?}}
+    % % \begin{itemize}
+    % %     \item Are there better ways to calibrate the stochastic model?
+    % % \end{itemize}
+    % \vspace{.2cm}
+    % \item \only<1> {Compare the stochastic model results with other existing models/approaches}
+    % \only<2> {\st{Compare the stochastic model results with other existing models/approaches}}
 \end{enumerate}    
 \end{frame}
 \section{The climate model}
 \begin{frame}{Model equations}
-  \onslide<1-> 2D climate model equations:
+  2D climate model equations:
 \begin{columns}[T] % align columns
 \begin{column}{.70\textwidth}
     \begin{footnotesize}
@@ -162,8 +155,8 @@
     \end{footnotesize}
 % \item Our goal is to numerically solve the model equations!
 % \end{itemize}
-\vspace{.2cm}
-Incompressible/compressible Navier-Stokes + Advection-diffusion eqs.
+% \vspace{.2cm}
+% Incompressible/compressible Navier-Stokes + Advection-diffusion eqs.
 \end{column}%
 \hfill%
 \begin{column}{.30\textwidth}
@@ -177,6 +170,8 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion eqs.
 $\mathbf{u}:$ velocity, \\ $\theta:$ temperature, \\ $p:$ pressure}
 \end{column}%
 \end{columns}
+\vspace{.4cm}
+Incompressible/compressible Navier-Stokes + Advection-diffusion equations
 \end{frame}
 \begin{frame}
     \frametitle{How to get the stochastic terms?}
@@ -193,7 +188,7 @@ $\mathbf{u}:$ velocity, \\ $\theta:$ temperature, \\ $p:$ pressure}
     \end{enumerate}
     \vspace{.5cm}}
     \onslide<2->{
-    \item \textbf{We use synthetic data!}}
+    \item \textbf{We use synthetic data (proof of concept)!}}
     \end{itemize}
 \end{frame}
 \begin{frame}{Our methodology}
@@ -247,12 +242,13 @@ $\mathbf{u}:$ velocity, \\ $\theta:$ temperature, \\ $p:$ pressure}
     \end{tikzpicture}
     }
     \end{figure}
-    We used an open-source Python Finite Element package for numerical implementation and simulation
+    Incremental validation approach - solve simpler components first, verify at each step!
+    % We used an open-source Python Finite Element package for numerical implementation and simulation
 \end{frame}
 \section{Numerical simulation of the climate model}
-\begin{frame}{Deterministic model simulation and model calibration}
+\begin{frame}{Data collection and model calibration}
 \begin{itemize}
-    \item We run the climate model in high-res. ($\Delta x = 1/128 \sim 30 ~ \text{km}$) for 45 time units ($\sim 25 ~ \text{days}$)
+    \item We run the deterministic climate model in high-res. ($\Delta x = 1/128 \sim 30 ~ \text{km}$) % for 45 time units ($\sim 25 ~ \text{days}$)
     
     \vspace{-.2cm}
     \begin{figure}
@@ -276,7 +272,7 @@ $\mathbf{u}:$ velocity, \\ $\theta:$ temperature, \\ $p:$ pressure}
         \includegraphics[width=0.7\linewidth]{images/cm_t45.png}
     \end{subfigure}
     \end{figure}
-    \item Analyze data $\rightarrow$ extract small-scale features (using statistical algorithms) $\rightarrow$ obtain $\boldsymbol{\xi}_i$
+    \item Analyze data $\rightarrow$ extract small-scale features (using statistical algorithms) $\rightarrow$ obtain $\textcolor{violet}{\sum_i \boldsymbol{\xi}_i ~ \deriv W^i}$
     \end{itemize}
 \end{frame}
 \subsection{Stochastic model simulation}
@@ -382,11 +378,11 @@ $\mathbf{u}:$ velocity, \\ $\theta:$ temperature, \\ $p:$ pressure}
         % \vspace{-.2cm}
         \includegraphics[width=0.65\linewidth]{images/spread_rmse_res_32_atm_ux_var_99_part_50_t25_onwards_ppt.pdf}
         \end{figure}
-        \item The size of ensemble spread is proportional to the RMSE (for at least 15 time units)
+        \item Ensemble spread $\propto$ RMSE (for at least 15 time units)
         \item Error in the stochastic solution can be estimated by its own spread 
-        \begin{itemize}
-            \item SPDE solution is suitable for data assimilation methods!
-        \end{itemize}
+        % \begin{itemize}
+        %     \item SPDE solution is suitable for data assimilation methods!
+        % \end{itemize}
     \end{itemize}
 \end{frame}
 \section{Summary}
@@ -394,11 +390,11 @@ $\mathbf{u}:$ velocity, \\ $\theta:$ temperature, \\ $p:$ pressure}
     \begin{itemize}
         \item \textcolor{rtg_darkblue}{Aim:} solve a stochastic coupled ocean-atmosphere climate model
         \vspace{.2cm}
-        \item \textcolor{rtg_darkblue}{Novelty:} Data-driven model
+        \item \textcolor{rtg_darkblue}{Novelty:} data-driven model
         \begin{itemize}
-            \item stochastic terms (modelling unresolved processes) are obtained from observation data
-            \item has desired properties: structure-preservation
-            \item We used high-res. model sim. data to estimate $\boldsymbol{\xi}_i$ $\rightarrow$ data analysis $\&$ statistical modelling
+            \item Stochastic terms (modelling unresolved processes) are obtained from observation data
+            \item Exhibit desired conservation properties
+            \item High-res. model sim. data is used to estimate $\boldsymbol{\xi}_i$ $\rightarrow$ data analysis $\&$ statistical modelling
         \end{itemize} 
         \vspace{.2cm}
         \item \textcolor{rtg_darkblue}{Methodology} for solving the model equations:
@@ -410,7 +406,7 @@ $\mathbf{u}:$ velocity, \\ $\theta:$ temperature, \\ $p:$ pressure}
         \vspace{.2cm}
         \item \textcolor{rtg_darkblue}{Results:}
         \begin{itemize}
-            \item Stochastic model solution capture the truth for some time units
+            \item Stochastic model solution captures the truth for some time units
             \item Shows promising UQ test results: ensemble spread size $\propto$ RMSE
         \end{itemize}
         \vspace{.2cm}
