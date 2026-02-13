@@ -104,14 +104,15 @@
         \item<1-> Deterministic
         \item<1-> Stochastic
     \end{enumerate}
-    \vspace{.2cm}
-    \item<2-> We explored \textbf{stochastic parameterization} : {stochastic advection by Lie transport} (SALT)
+    % \vspace{.2cm}
+    \item<1-> We explored \textbf{stochastic parameterization} : {stochastic advection by Lie transport} (SALT)
+    \vspace{.3cm}
     \item<2-> Why {SALT}? 
-    \begin{itemize}
-        \item<2-> preserves physical structure $\rightarrow$ reliable long simulations
-        \item<2-> better forecast skills $\rightarrow$ uncertainty due to unresolved transport processes can be quantified
-        \item<2-> conducive to data-driven approaches $\rightarrow$ can be estimated from observations/satellite data
-    \end{itemize}
+    % \begin{itemize}
+        \item<2-> \textcolor{rtg_darkblue}{preserves conservation properties} $\rightarrow$ reliable long simulations
+        \item<2-> \textcolor{rtg_darkblue}{better forecast skills} $\rightarrow$ uncertainty due to unresolved transport processes can be quantified
+        \item<2-> conducive to \textcolor{rtg_darkblue}{data-driven approaches} $\rightarrow$ can be estimated from observations/satellite data
+    % \end{itemize}
     % \item<4-> The stochastic terms models the unresolved transport processes! 
 \end{itemize}
 \end{frame}
@@ -249,8 +250,7 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion equations
 \begin{frame}{Data collection and model calibration}
 \begin{itemize}
     \item We run the deterministic climate model in high-res. ($\Delta x = 1/128 \sim 30 ~ \text{km}$) % for 45 time units ($\sim 25 ~ \text{days}$)
-    
-    \vspace{-.2cm}
+    \vspace{-.3cm}
     \begin{figure}
     \captionsetup[subfigure]{labelformat=empty}
     \centering
@@ -258,9 +258,9 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion equations
     \begin{subfigure}{1\textwidth}
         \centering
         \caption{Initial condition}
-        \includegraphics[width=0.7\linewidth]{images/cm_t0.png}
-        
+        \includegraphics[width=0.7\linewidth]{images/cm_t0.png}   
     \end{subfigure}
+    \vspace{-.1cm}
     % Arrow between images
     \tikz[yshift=3pt]\draw[ thick,->] (0,0) -- ++(0,-0.25);
     % \tikz[yshift=5pt]\draw[thick,->] 
@@ -308,7 +308,7 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion equations
     % \item 53 $\boldsymbol{\xi}_i$ out of 500 (which explains 99 $\%$ of the total variance) are used
     \item Stochastic vs. deterministic (without parameterization) model results at $t=35$
 \end{itemize}
-% \vspace{-.5cm}
+\vspace{-.5cm}
 \begin{columns}[T] % align columns
 \begin{column}{.48\textwidth}
         \begin{figure}
@@ -316,19 +316,19 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion equations
             \centering
             \begin{subfigure}[b]{.85\textwidth}
             \caption{Particle 1}
-            \vspace{-.2cm}
+            % \vspace{-.2cm}
             \includegraphics[width=1\linewidth]{images/vort_stoch_p1_same_99_var_ic_at_t35.pdf}
             \end{subfigure}
             \vspace{.2cm}
             \begin{subfigure}[b]{.85\textwidth}
             \caption{Particle 2}
-            \vspace{-.2cm}
+            % \vspace{-.2cm}
             \includegraphics[width=1\linewidth]{images/vort_stoch_p2_same_99_var_ic_at_t35.pdf}
             \end{subfigure}
             \vspace{.2cm}
             \begin{subfigure}[b]{.85\textwidth}
             \caption{Particle 3}
-            \vspace{-.2cm}
+            % \vspace{-.2cm}
             \includegraphics[width=1\linewidth]{images/vort_stoch_p3_same_99_var_ic_at_t35.pdf}
             \end{subfigure}
         \end{figure}
@@ -340,13 +340,13 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion equations
             \centering
             \begin{subfigure}[b]{.85\textwidth}
             \caption{Deterministic solution}
-            \vspace{-.2cm}
+            % \vspace{-.2cm}
             \includegraphics[width=1\linewidth]{images/vort_det_same_ic_at_t35.pdf}
             \end{subfigure}
             \vspace{.2cm}
             \begin{subfigure}[b]{.85\textwidth}
             \caption{\textbf{True solution}}
-            \vspace{-.2cm}
+            % \vspace{-.2cm}
             \includegraphics[width=1\linewidth]{images/vort_truth_at_t35.pdf}
             \end{subfigure}
         \end{figure}
@@ -359,7 +359,7 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion equations
         \onslide<1->{\begin{figure}
         \centering
         \caption{\textbf{Atmospheric velocity }($x$ component)}
-        % \vspace{-.1cm}
+        \vspace{-.2cm}
         \includegraphics[width=0.7\linewidth]{images/cm_res_32_atm_ux_var_99_part_50_t25_onwards_ppt.pdf}
         \end{figure}}
     \end{itemize} 
@@ -375,7 +375,7 @@ Incompressible/compressible Navier-Stokes + Advection-diffusion equations
         \begin{figure}
         \centering
         \caption{\textbf{RMSE vs. spread} for $u^a_x$}
-        % \vspace{-.2cm}
+        \vspace{-.2cm}
         \includegraphics[width=0.65\linewidth]{images/spread_rmse_res_32_atm_ux_var_99_part_50_t25_onwards_ppt.pdf}
         \end{figure}
         \item Ensemble spread $\propto$ RMSE (for at least 15 time units)
